@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTransactionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -7,9 +11,34 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | ROUTE UNTUK SEMUA USER (admin & pembeli)
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+
+        Route::resource('categories', CategoryController::class);
+        Route::resource('products', ProductController::class);
+        Route::resource('transaction',ProductTransactionController::class);
+    });
+
+
+    Route::middleware(['role:pembeli'])->group(function () {
+
+        Route::get('/products', [ProductController::class, 'index'])
+            ->name('products.index');
+
+        Route::post('/cart', [CartController::class, 'store'])
+            ->name('cart.store');
+
+        Route::post('/checkout', [ProductTransactionController::class, 'store'])
+            ->name('checkout.store');
+    });
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -17,4 +46,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
