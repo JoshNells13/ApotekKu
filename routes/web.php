@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTransactionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[HomeController::class, 'index'])->name('home');
+
+Route::get('/category/{slug}',[HomeController::class,'ShowCategory'])->name('ShowCategory');
+
 
 Route::middleware(['auth'])->group(function () {
 
