@@ -22,7 +22,7 @@ class HomeController extends Controller
     public function ShowCategory ($slug){
         $Category = Category::where('slug')->first();
 
-        $Product = Product::where('category_id', $Category->id)->get();
+        $Product = $Category->products;
 
         $CategoryAll = Category::all();
 
