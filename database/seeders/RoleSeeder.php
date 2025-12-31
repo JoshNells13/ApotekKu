@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
@@ -14,8 +16,21 @@ class RoleSeeder extends Seeder
         // Clear cache permission (WAJIB)
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Buat role
-        Role::firstOrCreate(['name' => 'admin']);
-        Role::firstOrCreate(['name' => 'pembeli']);
+        $ownerRole = Role::create([
+            'name' => 'owner'
+        ]);
+
+        $buyerRole = Role::create([
+            'name' => 'buyer'
+        ]);
+
+        $user = User::create([
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('12345678')
+        ]);
+
+        $user->assignRole($ownerRole);
+
     }
 }

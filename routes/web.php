@@ -13,39 +13,17 @@ Route::get('/',[HomeController::class, 'index'])->name('home');
 Route::get('/category/{slug}',[HomeController::class,'ShowCategory'])->name('ShowCategory');
 
 
-Route::middleware(['auth'])->group(function () {
-
-    /*
-    |--------------------------------------------------------------------------
-    | ROUTE UNTUK SEMUA USER (admin & pembeli)
-    |--------------------------------------------------------------------------
-    */
-
-    Route::middleware(['role:admin'])->prefix('admin')->group(function () {
-
-        Route::resource('categories', CategoryController::class);
-        Route::resource('products', ProductController::class);
-        Route::resource('transaction',ProductTransactionController::class);
-    });
-
-
-    Route::middleware(['role:pembeli'])->group(function () {
-
-        Route::get('/products', [ProductController::class, 'index'])
-            ->name('products.index');
-
-        Route::post('/cart', [CartController::class, 'store'])
-            ->name('cart.store');
-
-        Route::post('/checkout', [ProductTransactionController::class, 'store'])
-            ->name('checkout.store');
-    });
-});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('/admin')->name('admin.')->group(function(){
+        Route::resource('/products', ProductController::class)->middleware('role:owner');
+        Route::resource('/categories',CategoryController::class)->middleware('role:owner');
+        Route::resource('/transaction',ProductTransactionController::class)->middleware('role:owner');
+    });
 });
 
 require __DIR__ . '/auth.php';
