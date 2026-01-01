@@ -17,7 +17,7 @@ class ProductTransactionController extends Controller
             ->latest()
             ->get();
 
-        return view('transactions.index', compact('transactions'));
+        return view('Admin.transaction.index', compact('transactions'));
     }
 
     public function store(Request $request)

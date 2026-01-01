@@ -23,6 +23,11 @@ class Category extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
+    public function getCountCategoriesByProductAttribute()
+    {
+        return $this->products()->count();
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);

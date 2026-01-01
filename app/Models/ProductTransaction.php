@@ -34,4 +34,7 @@ class ProductTransaction extends Model
     {
         return $this->hasMany(TransactionDetail::class);
     }
+
+
+
 }
