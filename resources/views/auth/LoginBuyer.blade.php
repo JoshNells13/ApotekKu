@@ -1,5 +1,8 @@
  @extends('layouts.Auth')
 
+
+
+
  @section('content')
  <div class="bg-white rounded-2xl md:rounded-r-2xl md:rounded-l-none p-8 md:p-12 shadow-2xl">
      <!-- Mobile Logo -->
@@ -40,15 +43,7 @@
              </div>
          </div>
 
-         <!-- Remember & Forgot Password -->
-         <div class="flex items-center justify-between">
-             <label class="flex items-center space-x-2 cursor-pointer">
-                 <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                 <span class="text-gray-700 text-sm">Ingat saya</span>
-             </label>
-             <a href="#" class="text-blue-600 font-semibold text-sm hover:text-blue-800 transition">Lupa
-                 password?</a>
-         </div>
+
 
          <!-- Login Button -->
          <button type="submit"
@@ -56,36 +51,15 @@
              Masuk
          </button>
 
-         <!-- Divider -->
-         <div class="relative">
-             <div class="absolute inset-0 flex items-center">
-                 <div class="w-full border-t border-gray-300"></div>
-             </div>
-             <div class="relative flex justify-center text-sm">
-                 <span class="px-2 bg-white text-gray-600">atau</span>
-             </div>
-         </div>
 
-         <!-- Social Login -->
-         <div class="grid grid-cols-2 gap-4">
-             <button type="button"
-                 class="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition duration-200">
-                 <i class="fab fa-google text-red-500"></i>
-                 <span class="text-gray-700 font-semibold text-sm hidden sm:inline">Google</span>
-             </button>
-             <button type="button"
-                 class="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition duration-200">
-                 <i class="fab fa-facebook text-blue-600"></i>
-                 <span class="text-gray-700 font-semibold text-sm hidden sm:inline">Facebook</span>
-             </button>
-         </div>
      </form>
 
      <!-- Sign Up Link -->
      <div class="mt-8 text-center">
          <p class="text-gray-700">
              Belum memiliki akun?
-             <a href="#" class="text-blue-600 font-bold hover:text-blue-800 transition">Daftar di sini</a>
+             <a href="{{ route('register.buyer.page') }}" class="text-blue-600 font-bold hover:text-blue-800 transition">Daftar di sini</a>
+             <a href="{{ route('home') }}" class="text-blue-600 font-bold hover:text-blue-800 transition">Kembali?</a>
          </p>
      </div>
 

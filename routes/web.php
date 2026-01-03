@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\AuthBuyerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -9,6 +10,14 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTransactionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
+
+
+    Route::get('/login/user',[AuthBuyerController::class, 'index'])->name('login.buyer.page');
+    Route::get('/register/user',[AuthBuyerController::class, 'create'])->name('register.buyer.page');
+
+    Route::post('/login/user', [AuthBuyerController::class, 'authenticate'])->name('login.buyer');
+    Route::post('/register/user', [AuthBuyerController::class, 'store'])->name('register.buyer');
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -38,7 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [CartController::class, 'store'])->name('store');
         Route::delete('/{cart}', [CartController::class, 'destroy'])->name('destroy');
         Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
-        Route::post('/cart/transaction',[CartController::class, 'transaction'])->name('transaction');
+        Route::post('/cart/transaction', [CartController::class, 'transaction'])->name('transaction');
     });
 
 
@@ -53,7 +62,6 @@ Route::middleware('auth')->group(function () {
             Route::resource('categories', CategoryController::class);
             Route::resource('transactions', ProductTransactionController::class);
         });
-
 });
 
 

@@ -19,7 +19,7 @@
                         </div>
                         <span class="font-bold text-2xl">ApotekKu</span>
                     </div>
-                    <h1 class="text-4xl font-bold mb-6">Selamat Datang Kembali!</h1>
+                    <h1 class="text-4xl font-bold mb-6"> @yield('title','Selamat Datang Kembali') !</h1>
                     <p class="text-blue-100 text-lg mb-8">Masuk untuk mengakses akun Anda dan nikmati kemudahan berbelanja produk kesehatan berkualitas.</p>
 
                     <div class="space-y-6">
@@ -53,10 +53,6 @@
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-2 text-blue-200">
-                    <span>Belum punya akun?</span>
-                    <a href="#" class="text-white font-semibold hover:text-blue-300 transition">Daftar sekarang</a>
-                </div>
             </div>
 
             <!-- Right Side - Login Form -->

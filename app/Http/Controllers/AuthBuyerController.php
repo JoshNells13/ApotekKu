@@ -9,6 +9,37 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthBuyerController extends Controller
 {
+
+    public function index()
+    {
+
+        return view('auth.LoginBuyer');
+    }
+
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('/')
+                ->with('success', 'Login berhasil 🚀');
+        }
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ]);
+    }
+
+    public function create(){
+
+        return view('auth.RegisterBuyer');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -32,24 +63,6 @@ class AuthBuyerController extends Controller
             ->with('success', 'Register berhasil, selamat datang 🎉');
     }
 
-    public function authenticate(Request $request)
-    {
-        $credentials = $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('/')
-                ->with('success', 'Login berhasil 🚀');
-        }
-
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ]);
-    }
 
     public function logout(Request $request)
     {
