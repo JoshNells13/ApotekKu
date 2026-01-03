@@ -24,15 +24,23 @@
     <section class="bg-white py-8 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="relative">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <div class="flex-1 relative">
-                        <input type="text" placeholder="Cari produk, obat, atau vitamin..."
-                            class="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-600 transition">
-                        <i class="fas fa-search absolute right-4 top-3.5 text-blue-400"></i>
+                <form action="{{ route('search') }}" method="GET">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1 relative">
+                            <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari produk..."
+                                class="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-600 transition">
+                            <i class="fas fa-search absolute right-4 top-3.5 text-blue-400"></i>
+                        </div>
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                            Cari
+                        </button>
+                        <a href="{{ route('home') }}"
+                            class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                            Reset
+                        </a>
                     </div>
-                    <button
-                        class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition whitespace-nowrap">Cari</button>
-                </div>
+                </form>
             </div>
         </div>
     </section>
@@ -43,19 +51,20 @@
             <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">Kategori Produk</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
 
-                @if ($Category->isNotEmpty() )
+                @if ($Category->isNotEmpty())
                     @foreach ($Category as $item)
-                    <a href="{{ route('ShowCategory',$item->slug) }}" class="bg-white rounded-lg shadow hover:shadow-lg transition cursor-pointer p-6 text-center">
-                        <div class="flex justify-center mb-4">
-                            <div class="bg-blue-100 p-4 rounded-full">
-                                <i class="fas fa-capsules text-blue-600 text-2xl"></i>
+                        <a href="{{ route('category.show', $item->slug) }}"
+                            class="bg-white rounded-lg shadow hover:shadow-lg transition cursor-pointer p-6 text-center">
+                            <div class="flex justify-center mb-4">
+                                <div class="bg-blue-100 p-4 rounded-full">
+                                    <i class="fas fa-capsules text-blue-600 text-2xl"></i>
+                                </div>
                             </div>
-                        </div>
-                        <h3 class="font-semibold text-gray-800 text-sm md:text-base">{{ $item->name }}</h3>
-                    </a>
+                            <h3 class="font-semibold text-gray-800 text-sm md:text-base">{{ $item->name }}</h3>
+                        </a>
                     @endforeach
                 @else
-                     <h3 class="font-semibold text-gray-800 text-sm md:text-base">Tidak Ada Kategori Yang Tersedia</h3>
+                    <h3 class="font-semibold text-gray-800 text-sm md:text-base">Tidak Ada Kategori Yang Tersedia</h3>
                 @endif
                 <!-- Category 1 -->
 
@@ -73,82 +82,33 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Product 1 -->
-                <div class="bg-white rounded-lg shadow hover:shadow-xl transition overflow-hidden group">
-                    <div class="relative overflow-hidden bg-gray-200 h-48 flex items-center justify-center">
-                        <i class="fas fa-tablet text-6xl text-blue-300 group-hover:scale-110 transition"></i>
-                        <span
-                            class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">Baru</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-800 mb-2 text-sm">Paracetamol 500mg</h3>
-                        <p class="text-gray-600 text-xs mb-3">Obat penurun demam dan pereda nyeri</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-blue-600 font-bold text-lg">Rp 8.500</span>
-                            <button class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition">
-                                <i class="fas fa-shopping-cart"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Product 2 -->
-                <div class="bg-white rounded-lg shadow hover:shadow-xl transition overflow-hidden group">
-                    <div class="relative overflow-hidden bg-gray-200 h-48 flex items-center justify-center">
-                        <i class="fas fa-capsules text-6xl text-blue-300 group-hover:scale-110 transition"></i>
-                        <span
-                            class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">-15%</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-800 mb-2 text-sm">Vitamin C 1000mg</h3>
-                        <p class="text-gray-600 text-xs mb-3">Suplemen vitamin C untuk daya tahan tubuh</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-blue-600 font-bold text-lg">Rp 25.000</span>
-                            <button class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition">
-                                <i class="fas fa-shopping-cart"></i>
-                            </button>
+                @forelse ($LatestProduct as $product)
+                    <div class="bg-white rounded-lg shadow hover:shadow-xl transition overflow-hidden group">
+                        <div class="relative overflow-hidden bg-gray-200 h-48 flex items-center justify-center">
+                            <i class="fas fa-tablet text-6xl text-blue-300 group-hover:scale-110 transition"></i>
+                            <span
+                                class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">Baru</span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2 text-sm">{{ $product->name }}</h3>
+                            <p class="text-gray-600 text-xs mb-3">{{ $product->about }}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-600 font-bold text-lg">Rp
+                                    {{ number_format($product->price, 0, ',', '.') }}</span>
+                                <a href="{{ route('product.detail', $product->slug) }}"
+                                    class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @empty
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Produk Belum Tersedia</h2>
+                @endforelse
 
-                <!-- Product 3 -->
-                <div class="bg-white rounded-lg shadow hover:shadow-xl transition overflow-hidden group">
-                    <div class="relative overflow-hidden bg-gray-200 h-48 flex items-center justify-center">
-                        <i class="fas fa-hand-sparkles text-6xl text-blue-300 group-hover:scale-110 transition"></i>
-                        <span
-                            class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">Baru</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-800 mb-2 text-sm">Hand Sanitizer 500ml</h3>
-                        <p class="text-gray-600 text-xs mb-3">Pembersih tangan antiseptik berkualitas</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-blue-600 font-bold text-lg">Rp 15.000</span>
-                            <button class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition">
-                                <i class="fas fa-shopping-cart"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Product 4 -->
-                <div class="bg-white rounded-lg shadow hover:shadow-xl transition overflow-hidden group">
-                    <div class="relative overflow-hidden bg-gray-200 h-48 flex items-center justify-center">
-                        <i class="fas fa-face-smile text-6xl text-blue-300 group-hover:scale-110 transition"></i>
-                        <span
-                            class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">-20%</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-800 mb-2 text-sm">Masker Wajah</h3>
-                        <p class="text-gray-600 text-xs mb-3">Masker kesehatan dengan filter berlapis</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-blue-600 font-bold text-lg">Rp 35.000</span>
-                            <button class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition">
-                                <i class="fas fa-shopping-cart"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </div>
     </section>
 
     <!-- Features Section -->

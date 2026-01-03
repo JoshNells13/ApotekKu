@@ -27,7 +27,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('admin.transaction.index')" :active="request()->routeIs('admin.transaction.index')">
+                    <x-nav-link :href="route('admin.transactions.index')" :active="request()->routeIs('admin.transaction.index')">
                         {{ __('Manage Transaction Product') }}
                     </x-nav-link>
                 </div>

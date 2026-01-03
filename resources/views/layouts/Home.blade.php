@@ -17,7 +17,7 @@
                     <span class="font-bold text-xl">ApotekKu</span>
                 </div>
                 <div class="hidden md:flex space-x-6">
-                    <a href="#" class="hover:text-blue-200 transition">Beranda</a>
+                    <a href="{{ route('home') }}" class="hover:text-blue-200 transition">Beranda</a>
                     <a href="#" class="hover:text-blue-200 transition">Produk</a>
                     <a href="#" class="hover:text-blue-200 transition">Tentang</a>
                     <a href="#" class="hover:text-blue-200 transition">Kontak</a>
