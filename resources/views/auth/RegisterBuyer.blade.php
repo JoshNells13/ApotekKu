@@ -1,6 +1,8 @@
  @extends('layouts.Auth')
 
- @section('title', 'Selamat Datang Di ApoteKku')
+ @section('h1', 'Selamat Datang Di ApoteKku')
+
+ @section('title', 'Register')
 
  @section('content')
      <div class="bg-white rounded-2xl md:rounded-r-2xl md:rounded-l-none p-8 md:p-12 shadow-2xl">

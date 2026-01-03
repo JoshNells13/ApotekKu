@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ApotekKu</title>
+    <title>@yield('title','Login') - ApotekKu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -19,7 +19,7 @@
                         </div>
                         <span class="font-bold text-2xl">ApotekKu</span>
                     </div>
-                    <h1 class="text-4xl font-bold mb-6"> @yield('title','Selamat Datang Kembali') !</h1>
+                    <h1 class="text-4xl font-bold mb-6"> @yield('h1','Selamat Datang Kembali') !</h1>
                     <p class="text-blue-100 text-lg mb-8">Masuk untuk mengakses akun Anda dan nikmati kemudahan berbelanja produk kesehatan berkualitas.</p>
 
                     <div class="space-y-6">
