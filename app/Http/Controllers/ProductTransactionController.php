@@ -8,6 +8,7 @@ use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductTransactionController extends Controller
 {
@@ -15,9 +16,15 @@ class ProductTransactionController extends Controller
     {
         $transactions = ProductTransaction::with('user')
             ->latest()
-            ->get();
+            ->paginate(10);
 
-        return view('Admin.transaction.index', compact('transactions'));
+        $TransactionCount = ProductTransaction::count();
+
+        $TransactionCountPayed = ProductTransaction::where('is_paid', true)->count();
+
+        $TransactionCountUnPayed = ProductTransaction::where('is_paid', false)->count();
+
+        return view('Admin.transaction.index', compact('transactions', 'TransactionCount', 'TransactionCountPayed', 'TransactionCountUnPayed'));
     }
 
     public function store(Request $request)
@@ -59,5 +66,48 @@ class ProductTransactionController extends Controller
 
         return redirect()->route('transactions.index')
             ->with('success', 'Transaction created');
+    }
+
+    public function edit($id)
+    {
+        $transaction = ProductTransaction::with('user')->findOrFail($id);
+
+        return view('admin.transactions.edit', compact('transaction'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $transaction = ProductTransaction::findOrFail($id);
+
+        $validated = $request->validate([
+            'total_amount' => 'required|integer|min:0',
+            'is_paid'      => 'required|boolean',
+            'address'      => 'required|string|max:255',
+            'city'         => 'required|string|max:100',
+            'post_code'    => 'required|string|max:20',
+            'phone_number' => 'required|string|max:20',
+            'notes'        => 'nullable|string',
+            'proof'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Handle upload bukti pembayaran
+        if ($request->hasFile('proof')) {
+
+            // hapus bukti lama (kalau ada)
+            if ($transaction->proof && Storage::disk('public')->exists($transaction->proof)) {
+                Storage::disk('public')->delete($transaction->proof);
+            }
+
+            $validated['proof'] = $request->file('proof')->store(
+                'transaction-proofs',
+                'public'
+            );
+        }
+
+        $transaction->update($validated);
+
+        return redirect()
+            ->route('admin.transactions.index')
+            ->with('success', 'Transaksi berhasil diperbarui');
     }
 }

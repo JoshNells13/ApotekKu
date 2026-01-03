@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductTransaction;
+use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -15,8 +20,10 @@ class ProductController extends Controller
 
         $CountProduct = Product::count();
 
+        $Categories = Category::all();
+
         $products = Product::with('category')->latest()->paginate(10);
-        return view('Admin.product.index', compact('products','CountProduct'));
+        return view('Admin.product.index', compact('products', 'CountProduct', 'Categories'));
     }
 
     public function create()
@@ -26,34 +33,76 @@ class ProductController extends Controller
     }
 
 
+
+
     public function store(Request $request)
     {
-        $request->validate([
-            'name'        => 'required|string|max:255',
-            'price'       => 'required|integer',
-            'about'       => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'photo'       => 'required|image|mimes:jpg,jpeg,png|max:5120',
+        $validated = $request->validate([
+            'address'       => 'required|string|max:255',
+            'city'          => 'required|string|max:100',
+            'post_code'     => 'required|string|max:10',
+            'phone_number'  => 'required|string|max:20',
+            'notes'         => 'nullable|string|max:255',
+            'proof'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $photoPath = null;
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')
-                ->store('products', 'public');
-        }
+        $transaction = DB::transaction(function () use ($validated, $request) {
 
-        Product::create([
-            'name'        => $request->name,
-            'price'       => $request->price,
-            'about'       => $request->about,
-            'category_id' => $request->category_id,
-            'photo'       => $photoPath,
-        ]);
+            $carts = Cart::with('product')
+                ->where('user_id', Auth::id())
+                ->get();
+
+            if ($carts->isEmpty()) {
+                abort(400, 'Keranjang kosong');
+            }
+
+            // Hitung total
+            $totalAmount = $carts->sum(fn($cart) => $cart->product?->price ?? 0);
+
+            // Upload bukti pembayaran (jika ada)
+            $proofPath = null;
+            if ($request->hasFile('proof')) {
+                $proofPath = $request->file('proof')->store(
+                    'transaction-proofs',
+                    'public'
+                );
+            }
+
+            // Create transaksi
+            $transaction = ProductTransaction::create([
+                'user_id'       => Auth::id(),
+                'total_amount' => $totalAmount,
+                'is_paid'      => false,
+                'address'      => $validated['address'],
+                'city'         => $validated['city'],
+                'post_code'    => $validated['post_code'],
+                'phone_number' => $validated['phone_number'],
+                'notes'        => $validated['notes'] ?? null,
+                'proof'        => $proofPath,
+            ]);
+
+            // Detail transaksi
+            foreach ($carts as $cart) {
+                if (!$cart->product) continue;
+
+                TransactionDetail::create([
+                    'product_transaction_id' => $transaction->id,
+                    'product_id'             => $cart->product_id,
+                    'price'                  => $cart->product->price,
+                ]);
+            }
+
+            // Kosongkan cart
+            Cart::where('user_id', Auth::id())->delete();
+
+            return $transaction;
+        });
 
         return redirect()
-            ->route('admin.products.index')
-            ->with('success', 'Produk berhasil ditambahkan 🚀');
+            ->route('transactions.index')
+            ->with('success', 'Transaksi berhasil dibuat');
     }
+
 
 
     public function show(Product $product)

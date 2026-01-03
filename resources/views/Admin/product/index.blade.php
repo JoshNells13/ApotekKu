@@ -1,4 +1,6 @@
 <x-app-layout>
+
+
     <!-- Main Content -->
     <div class="p-6 md:p-8">
         <!-- Breadcrumb -->
@@ -39,13 +41,15 @@
                     <label class="block text-gray-700 font-semibold mb-2 text-sm">Kategori</label>
                     <select
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition text-sm">
+
+                        @if ($Categories->isNotEmpty())
                         <option value="">Semua Kategori</option>
-                        <option value="obat">Obat-obatan</option>
-                        <option value="vitamin">Vitamin & Suplemen</option>
-                        <option value="perawatan">Perawatan Luka</option>
-                        <option value="skincare">Skincare</option>
-                        <option value="gigi">Kesehatan Gigi</option>
-                        <option value="bayi">Perawatan Bayi</option>
+                            @foreach ($Categories as $Category)
+                            <option value="{{ $Category->slug }}">{{ $Category->name }}</option>
+                            @endforeach
+                        @else
+                        <option value="">Tidak Ada Kategori</option>
+                        @endif
                     </select>
                 </div>
 
@@ -153,7 +157,7 @@
             <!-- Pagination -->
             <div class="mt-4">
                 {{ $products->links() }}
-            </div>>
+            </div>
         </div>
     </div>
 </x-app-layout>

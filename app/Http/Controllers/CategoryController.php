@@ -11,10 +11,10 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $CountByCategory = Category::withCount('products')->get();
+        $CountCategory = Category::count();
 
         $categories = Category::latest()->get();
-        return view('Admin.category.index', compact('categories'));
+        return view('Admin.category.index', compact('categories','CountCategory'));
     }
 
 

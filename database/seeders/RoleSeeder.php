@@ -30,7 +30,15 @@ class RoleSeeder extends Seeder
             'password' => Hash::make('12345678')
         ]);
 
+
+        $userBuyer = User::create([
+            'name' => 'user',
+            'email' => 'user',
+            'password' => Hash::make('12345678')
+        ]);
+
         $user->assignRole($ownerRole);
+        $userBuyer->assignRole($buyerRole);
 
     }
 }
