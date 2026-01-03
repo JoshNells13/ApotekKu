@@ -24,23 +24,27 @@
                 {{-- Nama Kategori --}}
                 <div>
                     <label class="font-semibold text-gray-700">Nama Kategori</label>
-                    <input type="text" name="name" value="{{ old('name') }}"
-                        class="w-full mt-2 px-4 py-3 border-2 rounded-lg focus:border-blue-600"
-                        placeholder="Contoh: Obat-obatan" required>
-                    @error('name')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <div>
+                        <input type="text" name="name" value="{{ old('name') }}"
+                            class="w-64 mt-2 px-4 py-3 border-2 rounded-lg focus:border-blue-600"
+                            placeholder="Contoh: Obat-obatan" required>
+                        @error('name')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 {{-- Icon--}}
                 <div>
                     <label class="font-semibold text-gray-700">Icon Kategori</label>
-                    <input type="file" name="icon"
-                        class="w-full mt-2 px-4 py-3 border-2 rounded-lg focus:border-blue-600" accept="image/*"
-                        required>
-                    @error('icon')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <div>
+                        <input type="file" name="icon"
+                            class="w-64 mt-2 px-4 py-3 border-2 rounded-lg focus:border-blue-600" accept="image/*"
+                            required>
+                        @error('icon')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 {{-- Action --}}
