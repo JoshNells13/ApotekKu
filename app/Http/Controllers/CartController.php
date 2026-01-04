@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Product;
 use App\Models\ProductTransaction;
 use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class CartController extends Controller
             ->get();
 
         $subtotal = $carts->sum(function ($cart) {
-            return ($cart->product->price ?? 0) * $cart->quantity;
+            return ($cart->product->price ?? 0);
         });
 
         $shipping = 10000;
@@ -33,29 +34,23 @@ class CartController extends Controller
             'total'
         ));
     }
-
-    public function store(Request $request)
+    public function store(Request $request, Product $product)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-        ]);
-
         $exists = Cart::where('user_id', Auth::id())
-            ->where('product_id', $request->product_id)
+            ->where('product_id', $product->id)
             ->exists();
 
         if ($exists) {
-            return back()->with('info', 'Produk sudah ada di keranjang ');
+            return back()->with('info', 'Produk sudah ada di keranjang');
         }
 
         Cart::create([
             'user_id'    => Auth::id(),
-            'product_id' => $request->product_id,
+            'product_id' => $product->id,
         ]);
 
-        return back()->with('success', 'Produk berhasil ditambahkan ke keranjang ');
+        return back()->with('success', 'Produk berhasil ditambahkan ke keranjang');
     }
-
 
     public function destroy(Cart $cart)
     {
@@ -80,41 +75,31 @@ class CartController extends Controller
     public function transaction(Request $request)
     {
         $request->validate([
-            'address' => 'required',
-            'city' => 'required',
-            'post_code' => 'required',
-            'phone_number' => 'required'
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'post_code' => 'required|string',
+            'phone_number' => 'required|string',
+            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'total_amount' => 'required|integer',
         ]);
 
-        DB::transaction(function () use ($request) {
+        $proofPath = $request->file('photo')->store('proofs', 'public');
 
-            $carts = Cart::where('user_id', Auth::id())->with('product')->get();
+        ProductTransaction::create([
+            'user_id' => Auth::id(),
+            'total_amount' => $request->total_amount,
+            'address' => $request->address,
+            'city' => $request->city,
+            'post_code' => $request->post_code,
+            'phone_number' => $request->phone_number,
+            'notes' => $request->notes,
+            'proof' => $proofPath,
+        ]);
 
-            $total = $carts->sum(fn($c) => $c->product->price);
+        // Optional: kosongkan cart
+        Cart::where('user_id', Auth::id())->delete();
 
-            $transaction = ProductTransaction::create([
-                'user_id' => Auth::id(),
-                'total_amount' => $total,
-                'is_paid' => false,
-                'address' => $request->address,
-                'city' => $request->city,
-                'post_code' => $request->post_code,
-                'phone_number' => $request->phone_number,
-                'notes' => $request->notes
-            ]);
-
-            foreach ($carts as $cart) {
-                TransactionDetail::create([
-                    'product_transaction_id' => $transaction->id,
-                    'product_id' => $cart->product_id,
-                    'price' => $cart->product->price
-                ]);
-            }
-
-            Cart::where('user_id', Auth::id())->delete();
-        });
-
-        return redirect()->route('transactions.index')
-            ->with('success', 'Transaction created');
+        return redirect()->route('cart.index')
+            ->with('success', 'Pesanan berhasil dibuat, menunggu verifikasi 💙');
     }
 }

@@ -5,7 +5,7 @@
         <div class="mb-6 flex items-center space-x-2 text-sm">
             <a href="{{ route('dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a>
             <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-            <a href="{{ route('admin.transactions.index') }}" class="text-blue-600 hover:text-blue-800">
+            <a href="{{ route('transactions.index') }}" class="text-blue-600 hover:text-blue-800">
                 Transaksi
             </a>
             <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
@@ -23,7 +23,7 @@
         {{-- Form --}}
         <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
             <form
-                action="{{ route('admin.transactions.update', $transaction->id) }}"
+                action="{{ route('transactions.update', $transaction->id) }}"
                 method="POST"
                 enctype="multipart/form-data"
                 class="space-y-6"
@@ -163,7 +163,7 @@
                 {{-- Action --}}
                 <div class="flex justify-end gap-4 pt-4">
                     <a
-                        href="{{ route('admin.transactions.index') }}"
+                        href="{{ route('transactions.index') }}"
                         class="px-6 py-3 border-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-50"
                     >
                         Batal

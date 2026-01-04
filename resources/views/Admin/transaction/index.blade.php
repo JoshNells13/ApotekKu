@@ -178,20 +178,18 @@
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
-                                    <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('transactions.show', $trx->id) }}"
-                                            class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition"
-                                            title="Detail">
-                                            <i class="fas fa-eye"></i>
+                                    <div class="flex justify-center gap-2">
+                                        <a href="{{ route('transactions.edit', $trx->id) }}"
+                                            class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg">
+                                            <p>Edit</p>
                                         </a>
 
-                                        <form action="{{ route('transactions.destroy', $trx->id) }}" method="POST">
+                                        <form action="{{ route('transactions.destroy', $trx->id) }}"
+                                            method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"
-                                                class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition"
-                                                title="Hapus">
-                                                <i class="fas fa-trash"></i>
+                                            <button class="p-2 text-red-600 hover:bg-red-100 rounded-lg">
+                                                <p>Hapus</p>
                                             </button>
                                         </form>
                                     </div>

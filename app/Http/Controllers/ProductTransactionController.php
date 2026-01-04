@@ -50,7 +50,8 @@ class ProductTransactionController extends Controller
                 'city' => $request->city,
                 'post_code' => $request->post_code,
                 'phone_number' => $request->phone_number,
-                'notes' => $request->notes
+                'notes' => $request->notes,
+                'proof'
             ]);
 
             foreach ($carts as $cart) {
@@ -72,7 +73,9 @@ class ProductTransactionController extends Controller
     {
         $transaction = ProductTransaction::with('user')->findOrFail($id);
 
-        return view('admin.transactions.edit', compact('transaction'));
+
+
+        return view('Admin.transaction.edit', compact('transaction'));
     }
 
     public function update(Request $request, $id)
@@ -107,7 +110,7 @@ class ProductTransactionController extends Controller
         $transaction->update($validated);
 
         return redirect()
-            ->route('admin.transactions.index')
+            ->route('transactions.index')
             ->with('success', 'Transaksi berhasil diperbarui');
     }
 }

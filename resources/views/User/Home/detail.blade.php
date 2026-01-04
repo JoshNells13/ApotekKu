@@ -89,18 +89,20 @@
 
 
 
-                <!-- Action Buttons -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    {{-- <button class="w-full px-6 py-4 border-2 border-blue-600 text-blue-600 font-bold rounded-lg hover:bg-blue-50 transition flex items-center justify-center space-x-2">
-                        <i class="fas fa-heart text-xl"></i>
-                        <span>Wishlist</span>
-                    </button> --}}
-                    <button
-                        class="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-lg hover:from-blue-700 hover:to-blue-800 transition shadow-lg hover:shadow-xl flex items-center justify-center space-x-2">
+                <form action="{{ route('cart.store',$Product->slug) }}" method="POST">
+                    @csrf
+
+                    <input type="hidden" name="product_id" value="{{ $Product->id }}">
+                    <input type="hidden" name="qty" value="1">
+
+                    <button type="submit"
+                        class="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700
+               text-white font-bold rounded-lg hover:from-blue-700 hover:to-blue-800
+               transition shadow-lg hover:shadow-xl flex items-center justify-center space-x-2">
                         <i class="fas fa-shopping-cart text-xl"></i>
-                        <a href="{{ route('cart.store') }}" >Tambah ke Keranjang</a>
+                        <span>Tambah ke Keranjang</span>
                     </button>
-                </div>
+                </form>
             </div>
         </div>
 

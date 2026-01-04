@@ -23,7 +23,9 @@
                     <a href="#" class="hover:text-blue-200 transition">Kontak</a>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <i class="fas fa-shopping-cart text-xl cursor-pointer hover:text-blue-200 transition"></i>
+                    <a href="{{ route('cart.index') }}">
+                        <i class="fas fa-shopping-cart text-xl cursor-pointer hover:text-blue-200 transition"></i>
+                    </a>
                     <i class="md:hidden fas fa-bars text-xl cursor-pointer"></i>
                 </div>
             </div>

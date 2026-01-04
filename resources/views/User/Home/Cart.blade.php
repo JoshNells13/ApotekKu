@@ -34,7 +34,7 @@
                                 <div class="text-right">
                                     <p class="text-sm text-gray-600">Qty: {{ $cart->quantity }}</p>
                                     <p class="font-bold">
-                                        Rp {{ number_format((optional($cart->product)->price ?? 0) * $cart->quantity) }}
+                                        Rp {{ number_format((optional($cart->product)->price ?? 0)) }}
                                     </p>
                                 </div>
                             </div>

@@ -33,7 +33,7 @@ class RoleSeeder extends Seeder
 
         $userBuyer = User::create([
             'name' => 'user',
-            'email' => 'user',
+            'email' => 'user@gmail.com',
             'password' => Hash::make('12345678')
         ]);
 

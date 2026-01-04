@@ -13,12 +13,6 @@ use Illuminate\Support\Facades\Route;
 
 
 
-    Route::get('/login/user',[AuthBuyerController::class, 'index'])->name('login.buyer.page');
-    Route::get('/register/user',[AuthBuyerController::class, 'create'])->name('register.buyer.page');
-
-    Route::post('/login/user', [AuthBuyerController::class, 'authenticate'])->name('login.buyer');
-    Route::post('/register/user', [AuthBuyerController::class, 'store'])->name('register.buyer');
-
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/category/{slug}', [HomeController::class, 'ShowCategory'])->name('category.show');
@@ -31,7 +25,7 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
+        ->name('dashboard')->middleware('role:owner');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])
@@ -43,24 +37,23 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('cart')->name('cart.')->group(function () {
-        Route::get('/', [CartController::class, 'index'])->name('index');
-        Route::post('/', [CartController::class, 'store'])->name('store');
-        Route::delete('/{cart}', [CartController::class, 'destroy'])->name('destroy');
-        Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
-        Route::post('/cart/transaction', [CartController::class, 'transaction'])->name('transaction');
+        Route::get('/', [CartController::class, 'index'])->name('index')->middleware('role:buyer');
+        Route::post('/{product:slug}', [CartController::class, 'store'])->name('store')->middleware('role:buyer');
+        Route::delete('/{cart}', [CartController::class, 'destroy'])->name('destroy')->middleware('role:buyer');
+        Route::delete('/clear', [CartController::class, 'clear'])->name('clear')->middleware('role:buyer');
+        Route::post('/cart/transaction', [CartController::class, 'transaction'])->name('transaction')->middleware('role:buyer');
     });
 
 
+    Route::resource('transactions', ProductTransactionController::class)->middleware('role:owner|buyer');
     // Admin
 
     Route::prefix('admin')
         ->name('admin.')
         ->middleware('role:owner')
         ->group(function () {
-
             Route::resource('products', ProductController::class);
             Route::resource('categories', CategoryController::class);
-            Route::resource('transactions', ProductTransactionController::class);
         });
 });
 
