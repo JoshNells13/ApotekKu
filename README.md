@@ -21,7 +21,7 @@ Aplikasi ini dibangun menggunakan **Laravel Breeze** untuk autentikasi dan **Spa
 - Menambahkan produk ke keranjang
 - Checkout & membuat transaksi
 - Upload bukti pembayaran
-- Melihat status transaksi (OTW)
+- Melihat status transaksi 
 
 #### 🧑‍💼 Owner (Admin)
 - Dashboard admin
