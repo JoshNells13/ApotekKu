@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50">
+
+<body class="bg-gray-50 min-h-screen flex flex-col">
     <!-- Navbar -->
     <nav class="sticky top-0 z-40 bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,8 +23,13 @@
                     <a href="#" class="hover:text-blue-200 transition">Produk</a>
                     <a href="#" class="hover:text-blue-200 transition">Tentang</a>
                     <a href="#" class="hover:text-blue-200 transition">Kontak</a>
+                    <a href="{{ route('transactions.my') }}" class="hover:text-blue-200 transition">
+                        Transaksi Saya
+                    </a>
+
                 </div>
-                <div class="flex items-center space-x-4">
+                <div class="flex
+                        items-center space-x-4">
                     <a href="{{ route('cart.index') }}">
                         <i class="fas fa-shopping-cart text-xl cursor-pointer hover:text-blue-200 transition"></i>
                     </a>
@@ -32,7 +39,10 @@
         </div>
     </nav>
 
-    @yield('content')
+
+    <main class="flex-1 w-full">
+        @yield('content')
+    </main>
 
     <!-- Footer -->
     <footer class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
@@ -73,4 +83,5 @@
         </div>
     </footer>
 </body>
+
 </html>

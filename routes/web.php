@@ -46,8 +46,9 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('transactions', ProductTransactionController::class)->middleware('role:owner|buyer');
+    Route::get('/my-transactions', [ProductTransactionController::class, 'myTransactions'])
+        ->name('transactions.my')->middleware('role:buyer');
     // Admin
-
     Route::prefix('admin')
         ->name('admin.')
         ->middleware('role:owner')

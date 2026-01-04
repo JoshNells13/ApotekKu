@@ -113,4 +113,13 @@ class ProductTransactionController extends Controller
             ->route('transactions.index')
             ->with('success', 'Transaksi berhasil diperbarui');
     }
+
+    public function myTransactions()
+    {
+        $transactions = ProductTransaction::where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('User.Home.TransactionStatus', compact('transactions'));
+    }
 }
